@@ -1,0 +1,30 @@
+﻿@model IEnumerable<BikePath.Models.User>
+@{
+    //ViewData["Title"] = "Статистика";
+    Layout = null;
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Статистика пользователя</title>
+</head>
+<body>
+    <h3>Маршруты</h3>
+    <table>
+        <tr>
+            <td>Название</td>
+            <td>Протяженность</td>
+        </tr>
+
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>@user.Name</td>
+                    <td>@user.Email</td>
+                </tr>
+            }
+        
+    </table>
+</body>
+</html>
