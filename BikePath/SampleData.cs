@@ -2,13 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace BikePath
 {
     public static class SampleData
     {
-        public static void InitDB(MyContext context)
+        public static void InitDB(BikePathContext context)
         {
             if (!context.Users.Any())
             {

@@ -6,8 +6,8 @@ namespace MobileStore.Controllers
 {
     public class HomeController : Controller
     {
-        MyContext db;
-        public HomeController(MyContext context)
+        BikePathContext db;
+        public HomeController(BikePathContext context)
         {
             db = context;
         }

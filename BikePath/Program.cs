@@ -22,7 +22,7 @@ namespace BikePath
 
                 try
                 {
-                    var context = services.GetRequiredService<MyContext>();
+                    var context = services.GetRequiredService<BikePathContext>();
                     SampleData.InitDB(context);
                 }
                 catch (Exception ex)

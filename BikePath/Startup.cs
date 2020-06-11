@@ -26,7 +26,7 @@ namespace BikePath
         public void ConfigureServices(IServiceCollection services)
         {
             string connection = Configuration.GetConnectionString("DefaultConnection");
-            services.AddDbContext<MyContext>(options => options.UseSqlServer(connection));
+            services.AddDbContext<BikePathContext>(options => options.UseSqlServer(connection));
             services.AddControllersWithViews();
         }
 
