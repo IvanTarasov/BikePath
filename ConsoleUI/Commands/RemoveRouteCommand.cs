@@ -7,22 +7,22 @@ using System.Text;
 
 namespace ConsoleUI.Commands
 {
-    class UpdateMyDistanceWithRouteCommand : ICommand
+    class RemoveRouteCommand : ICommand
     {
         public string Name { get; private set; }
         public string Description { get; private set; }
 
-        public UpdateMyDistanceWithRouteCommand()
+        public RemoveRouteCommand()
         {
-            Name = "use route";
-            Description = "updates your distance using an existing route";
+            Name = "remove route";
+            Description = "remove changed route";
         }
 
         public string Execute()
         {
             string response = string.Empty;
-            BikePathContext db = new BikePathContext();
 
+            BikePathContext db = new BikePathContext();
             Console.WriteLine("           ROUTES" + "\n");
             Console.WriteLine("  Title     " + "|" + "     Length  " + "\n");
             var routes = db.Routes.Include(r => r.User).ToList();
@@ -36,14 +36,12 @@ namespace ConsoleUI.Commands
 
             foreach (var route in routes)
             {
-                if(selectRoute == route.Title)
+                if (selectRoute == route.Title)
                 {
-                    BikePathContext bd = new BikePathContext();
-                    GlobalData.User.Distance += route.Length;
-                    bd.Users.Update(GlobalData.User);
-                    bd.SaveChanges();
+                    db.Routes.Remove(route);
+                    db.SaveChanges();
 
-                    return "Succesfull!";
+                    return "Success!";
                 }
             }
 

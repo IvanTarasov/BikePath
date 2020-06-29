@@ -1,4 +1,4 @@
-﻿@model IEnumerable<BikePath.Models.User>
+﻿@model IEnumerable<BikePath.Models.User>;
 @{
     //ViewData["Title"] = "Статистика";
     Layout = null;
@@ -10,21 +10,25 @@
     <title>Статистика пользователя</title>
 </head>
 <body>
+    <h1>Статистика</h1>
     <h3>Маршруты</h3>
     <table>
         <tr>
             <td>Название</td>
             <td>Протяженность</td>
         </tr>
-
-            @foreach (var user in Model)
+        @foreach (var user in Model)
+        {
+            @foreach (var route in user.Routes)
             {
                 <tr>
-                    <td>@user.Name</td>
-                    <td>@user.Email</td>
+                    <td>@route.Title</td>
+                    <td>@route.Length</td>
                 </tr>
             }
-        
+        }
+
+
     </table>
 </body>
 </html>

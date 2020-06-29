@@ -17,12 +17,11 @@ namespace ConsoleUI.Commands
 
         public string Execute()
         {
-            string commandList = "{\n";
+            string commandList = string.Empty;
             foreach (var command in GlobalData.Commands)
             {
                 commandList += command.ToString() + "\n";
             }
-            commandList += "}";
 
             return commandList;
         }

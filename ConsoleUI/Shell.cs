@@ -1,8 +1,7 @@
-﻿using ConsoleUI.Commands;
+﻿using BikePath.Models;
+using ConsoleUI.Commands;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Text;
 
 namespace ConsoleUI
 {
@@ -14,6 +13,7 @@ namespace ConsoleUI
         {
             GlobalData.ShellIsWork = true;
 
+            Registration();
             InitCommands();
             PrintInitialInfo();
             StartGettingCommands();
@@ -30,6 +30,8 @@ namespace ConsoleUI
             Commands.Add(new UpdateMyDistanceCommand());
             Commands.Add(new UpdateMyDistanceWithRouteCommand());
             Commands.Add(new TestCommand());
+            Commands.Add(new ClearStatCommand());
+            Commands.Add(new RemoveRouteCommand());
 
             GlobalData.Commands = Commands;
         }
@@ -74,9 +76,40 @@ namespace ConsoleUI
             return command;
         }
 
-        public List<ICommand> GetCommandList()
+        private void Registration()
         {
-            return Commands;
+            while (true)
+            {
+                string email = GetEmail();
+                string pass = GetPassword();
+
+                User user = UserReg.EnterToAccount(email, pass);
+                if (user != null)
+                {
+                    GlobalData.User = user;
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Incorrect email or password, pleace try again");
+                }
+            }
+        }
+
+        private string GetEmail()
+        {
+            Console.Write("EMAIL: ");
+            string email = Console.ReadLine();
+
+            return email;
+        }
+
+        private string GetPassword()
+        {
+            Console.Write("PASSWORD: ");
+            string pass = Console.ReadLine();
+
+            return pass;
         }
     }
 }

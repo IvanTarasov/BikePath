@@ -1,4 +1,5 @@
 ﻿using BikePath.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -7,36 +8,35 @@ using System.Text;
 
 namespace ConsoleUI.Commands
 {
-    class PrintMyStatCommand : ICommand
+    class ClearStatCommand : ICommand
     {
         public string Name { get; private set; }
         public string Description { get; private set; }
 
-        public PrintMyStatCommand()
+        public ClearStatCommand()
         {
-            Name = "stat";
-            Description = "displays your statistics";
+            Name = "clear stat";
+            Description = "clear you statistic (routes and distance)";
         }
 
         public string Execute()
         {
             string response = string.Empty;
-            User user = GlobalData.User;
+
             BikePathContext db = new BikePathContext();
-
-
-            response += "User: " + user.Name + "\n"
-                      + "Email: " + user.Email + "\n"
-                      + "Distance: " + user.Distance + "\n" + "\n";
-
-            response += "           ROUTES" + "\n";
-            response += "  Title     " + "|" + "     Length  " + "\n";
-
             var routes = db.Routes.Include(r => r.User).ToList();
             foreach (var route in routes)
             {
-                response += route.Title + " | " + route.Length + "\n";
+                db.Routes.Remove(route);
             }
+            db.SaveChanges();
+
+            BikePathContext bd = new BikePathContext();
+            GlobalData.User.Distance = 0;
+            bd.Users.Update(GlobalData.User);
+            bd.SaveChanges();
+
+            response = "Success!";
 
             return response;
         }

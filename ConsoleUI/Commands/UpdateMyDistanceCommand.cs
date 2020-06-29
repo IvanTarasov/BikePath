@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BikePath.Models;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -11,13 +12,37 @@ namespace ConsoleUI.Commands
 
         public UpdateMyDistanceCommand()
         {
-            Name = "updateMyDistance";
+            Name = "update distance";
             Description = "updates your distance using distance input";
         }
 
         public string Execute()
         {
-            return "null";
+            string response = string.Empty;
+            double length;
+
+            while (true)
+            {
+                Console.Write("Distance traveled: ");
+                string len = Console.ReadLine();
+
+                if (double.TryParse(len, out length))
+                {
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Incorrect length!");
+                }
+            }
+
+            BikePathContext db = new BikePathContext();
+            GlobalData.User.Distance += length;
+            db.Users.Update(GlobalData.User);
+            db.SaveChanges();
+
+            response = "Succesfull!";
+            return response;
         }
 
         public override string ToString()
