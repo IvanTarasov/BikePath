@@ -40,10 +40,5 @@ namespace ConsoleUI.Commands
 
             return response;
         }
-
-        public override string ToString()
-        {
-            return Name + ": " + Description;
-        }
     }
 }

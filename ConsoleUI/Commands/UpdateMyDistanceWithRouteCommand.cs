@@ -49,10 +49,5 @@ namespace ConsoleUI.Commands
 
             return "Unknown route!";
         }
-
-        public override string ToString()
-        {
-            return Name + ": " + Description;
-        }
     }
 }

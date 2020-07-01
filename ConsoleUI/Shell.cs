@@ -29,11 +29,12 @@ namespace ConsoleUI
             Commands.Add(new PrintMyStatCommand());
             Commands.Add(new UpdateMyDistanceCommand());
             Commands.Add(new UpdateMyDistanceWithRouteCommand());
-            Commands.Add(new TestCommand());
             Commands.Add(new ClearStatCommand());
             Commands.Add(new RemoveRouteCommand());
 
-            GlobalData.Commands = Commands;
+            // add new commands here
+
+            GlobalData.SetCommads(Commands);
         }
 
         private void PrintInitialInfo()
@@ -57,7 +58,8 @@ namespace ConsoleUI
                     if (commandStr == command.Name)
                     {
                         commandIsFound = true;
-                        Console.WriteLine(command.Execute());
+                        string messageOfCommand = command.Execute();
+                        Console.WriteLine("message: {0}", messageOfCommand);
                     }
                 }
 
@@ -78,20 +80,27 @@ namespace ConsoleUI
 
         private void Registration()
         {
-            while (true)
+            if (GlobalData.AppTest)
             {
-                string email = GetEmail();
-                string pass = GetPassword();
+                GlobalData.User = UserReg.EnterToAccount("ivan.tarasov12345@gmail.com", "1234509876_Asdivannew");
+            }
+            else
+            {
+                while (true)
+                {
+                    string email = GetEmail();
+                    string pass = GetPassword();
 
-                User user = UserReg.EnterToAccount(email, pass);
-                if (user != null)
-                {
-                    GlobalData.User = user;
-                    break;
-                }
-                else
-                {
-                    Console.WriteLine("Incorrect email or password, pleace try again");
+                    User user = UserReg.EnterToAccount(email, pass);
+                    if (user != null)
+                    {
+                        GlobalData.User = user;
+                        break;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Incorrect email or password, pleace try again");
+                    }
                 }
             }
         }

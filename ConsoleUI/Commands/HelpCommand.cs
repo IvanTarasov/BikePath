@@ -20,15 +20,10 @@ namespace ConsoleUI.Commands
             string commandList = string.Empty;
             foreach (var command in GlobalData.Commands)
             {
-                commandList += command.ToString() + "\n";
+                commandList += command.GetInfo() + "\n";
             }
 
             return commandList;
-        }
-
-        public override string ToString()
-        {
-            return Name + ": " + Description;
         }
     }
 }

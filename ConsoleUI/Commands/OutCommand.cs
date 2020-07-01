@@ -20,10 +20,5 @@ namespace ConsoleUI.Commands
             GlobalData.ShellIsWork = false;
             return "Goodbye!";
         }
-
-        public override string ToString()
-        {
-            return Name + ": " + Description;
-        }
     }
 }

@@ -12,6 +12,8 @@ namespace ConsoleUI
 
         string Execute();
 
-        // override ToString() for normal work 
+        string GetInfo() {
+            return Name + ": " + Description;
+        } 
     }
 }

@@ -1,4 +1,5 @@
-﻿using BikePath.Models;
+﻿using BikePath;
+using BikePath.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -21,29 +22,29 @@ namespace ConsoleUI.Commands
 
         public string Execute()
         {
-            string response = string.Empty;
-
-            BikePathContext db = new BikePathContext();
-            var routes = db.Routes.Include(r => r.User).ToList();
-            foreach (var route in routes)
+            void RemoveRoutes()
             {
-                db.Routes.Remove(route);
+                BikePathContext db = new BikePathContext();
+                var routes = db.Routes.Include(r => r.User).ToList();
+                foreach (var route in routes)
+                {
+                    db.Routes.Remove(route);
+                }
+                db.SaveChanges();
             }
-            db.SaveChanges();
 
-            BikePathContext bd = new BikePathContext();
-            GlobalData.User.Distance = 0;
-            bd.Users.Update(GlobalData.User);
-            bd.SaveChanges();
+            void ClearDistance()
+            {
+                BikePathContext db = new BikePathContext();
+                GlobalData.User.Distance = 0;
+                db.Users.Update(GlobalData.User);
+                db.SaveChanges();
+            }
 
-            response = "Success!";
+            RemoveRoutes();
+            ClearDistance();
 
-            return response;
-        }
-
-        public override string ToString()
-        {
-            return Name + ": " + Description;
+            return "statistics successfully cleared";
         }
     }
 }

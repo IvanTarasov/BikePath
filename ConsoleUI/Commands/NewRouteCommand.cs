@@ -52,10 +52,5 @@ namespace ConsoleUI.Commands
             response = "Succesfull!";
             return response;
         }
-
-        public override string ToString()
-        {
-            return Name + ": " + Description;
-        }
     }
 }
