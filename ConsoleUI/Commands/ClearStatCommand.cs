@@ -1,11 +1,5 @@
 ﻿using BikePath;
-using BikePath.Models;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using ConsoleUI.GlobalData;
 
 namespace ConsoleUI.Commands
 {
@@ -22,27 +16,8 @@ namespace ConsoleUI.Commands
 
         public string Execute()
         {
-            void RemoveRoutes()
-            {
-                BikePathContext db = new BikePathContext();
-                var routes = db.Routes.Include(r => r.User).ToList();
-                foreach (var route in routes)
-                {
-                    db.Routes.Remove(route);
-                }
-                db.SaveChanges();
-            }
-
-            void ClearDistance()
-            {
-                BikePathContext db = new BikePathContext();
-                GlobalData.User.Distance = 0;
-                db.Users.Update(GlobalData.User);
-                db.SaveChanges();
-            }
-
-            RemoveRoutes();
-            ClearDistance();
+            DBWorker.ClearRoutes(ref ApplicationContext.Context);
+            DBWorker.ClearDistance(ref ApplicationContext.Context, ref ActualUser.User);
 
             return "statistics successfully cleared";
         }

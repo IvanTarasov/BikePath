@@ -1,8 +1,7 @@
-﻿using BikePath.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using BikePath;
+using BikePath.Models;
+using ConsoleUI.GlobalData;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ConsoleUI.Commands
 {
@@ -19,8 +18,6 @@ namespace ConsoleUI.Commands
 
         public string Execute()
         {
-            string response = string.Empty;
-
             Console.WriteLine("NEW ROUTE:");
             Console.Write(" TITLE: ");
             string title = Console.ReadLine();
@@ -41,16 +38,10 @@ namespace ConsoleUI.Commands
                 }
             }
 
-            BikePathContext db = new BikePathContext();
-            db.Routes.Add(new Route { Title = title, Length = length, User = GlobalData.User });
+            Route route = new Route { Title = title, Length = length, User = ActualUser.User };
+            DBWorker.AddRoute(ref ApplicationContext.Context, route);
 
-            var entry = db.Entry(GlobalData.User);
-            entry.State = EntityState.Unchanged;
-
-            db.SaveChanges();
-
-            response = "Succesfull!";
-            return response;
+            return "route added successfully";
         }
     }
 }

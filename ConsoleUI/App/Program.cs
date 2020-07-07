@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ConsoleUI.App;
+using System;
 
 namespace ConsoleUI
 {
@@ -6,6 +7,9 @@ namespace ConsoleUI
     {
         static void Main(string[] args)
         {
+            bool tested = true;
+            Config.SetConfig(tested);
+
             Shell shell = new Shell();
             shell.Start();
         }

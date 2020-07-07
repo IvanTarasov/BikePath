@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using ConsoleUI.GlobalData;
+using System;
 
 namespace ConsoleUI.Commands
 {
@@ -17,13 +16,12 @@ namespace ConsoleUI.Commands
 
         public string Execute()
         {
-            string commandList = string.Empty;
-            foreach (var command in GlobalData.Commands)
+            foreach (var command in CommandList.Commands)
             {
-                commandList += command.GetInfo() + "\n";
+                Console.WriteLine(command.GetInfo());
             }
 
-            return commandList;
+            return "command list received";
         }
     }
 }

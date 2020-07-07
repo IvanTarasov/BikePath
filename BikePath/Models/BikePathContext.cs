@@ -14,7 +14,7 @@ namespace BikePath.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=bikePath;Trusted_Connection=True;");
+            optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=myDb;Trusted_Connection=True;MultipleActiveResultSets=true;");
         }
     }
 }

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using ConsoleUI.GlobalData;
 
 namespace ConsoleUI.Commands
 {
@@ -17,7 +15,7 @@ namespace ConsoleUI.Commands
 
         public string Execute()
         {
-            GlobalData.ShellIsWork = false;
+            ShellStatus.IsWork = false;
             return "Goodbye!";
         }
     }

@@ -1,7 +1,5 @@
 ﻿using BikePath.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using ConsoleUI.GlobalData;
 
 namespace ConsoleUI
 {
@@ -9,9 +7,7 @@ namespace ConsoleUI
     {
         public static User EnterToAccount(string email, string password)
         {
-            BikePathContext db = new BikePathContext();
-
-            foreach (var user in db.Users)
+            foreach (var user in ApplicationContext.Context.Users)
             {
                 if (email == user.Email && password == user.Password)
                 {

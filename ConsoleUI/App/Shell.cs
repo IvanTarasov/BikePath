@@ -1,5 +1,8 @@
-﻿using BikePath.Models;
+﻿using BikePath;
+using BikePath.Models;
+using ConsoleUI.App;
 using ConsoleUI.Commands;
+using ConsoleUI.GlobalData;
 using System;
 using System.Collections.Generic;
 
@@ -11,7 +14,8 @@ namespace ConsoleUI
 
         public void Start()
         {
-            GlobalData.ShellIsWork = true;
+            ShellStatus.IsWork = true;
+            ApplicationContext.Context = new BikePathContext();
 
             Registration();
             InitCommands();
@@ -34,7 +38,7 @@ namespace ConsoleUI
 
             // add new commands here
 
-            GlobalData.SetCommads(Commands);
+            CommandList.SetCommands(Commands);
         }
 
         private void PrintInitialInfo()
@@ -48,7 +52,7 @@ namespace ConsoleUI
 
         private void StartGettingCommands()
         {
-            while (GlobalData.ShellIsWork)
+            while (ShellStatus.IsWork)
             {
                 string commandStr = GetCommandOfConsole();
                 bool commandIsFound = false;
@@ -80,9 +84,9 @@ namespace ConsoleUI
 
         private void Registration()
         {
-            if (GlobalData.AppTest)
+            if (Config.Tested)
             {
-                GlobalData.User = UserReg.EnterToAccount("ivan.tarasov12345@gmail.com", "1234509876_Asdivannew");
+                ActualUser.SetUser(UserReg.EnterToAccount("ivan.tarasov12345@gmail.com", "1234509876_Asdivannew"));
             }
             else
             {
@@ -94,7 +98,7 @@ namespace ConsoleUI
                     User user = UserReg.EnterToAccount(email, pass);
                     if (user != null)
                     {
-                        GlobalData.User = user;
+                        ActualUser.SetUser(user);
                         break;
                     }
                     else

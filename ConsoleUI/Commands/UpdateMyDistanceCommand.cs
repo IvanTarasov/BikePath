@@ -1,7 +1,6 @@
-﻿using BikePath.Models;
+﻿using BikePath;
+using ConsoleUI.GlobalData;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ConsoleUI.Commands
 {
@@ -18,7 +17,6 @@ namespace ConsoleUI.Commands
 
         public string Execute()
         {
-            string response = string.Empty;
             double length;
 
             while (true)
@@ -36,13 +34,8 @@ namespace ConsoleUI.Commands
                 }
             }
 
-            BikePathContext db = new BikePathContext();
-            GlobalData.User.Distance += length;
-            db.Users.Update(GlobalData.User);
-            db.SaveChanges();
-
-            response = "Succesfull!";
-            return response;
+            DBWorker.UpdateDistance(ref ApplicationContext.Context, ref ActualUser.User, length);
+            return "distance updated";
         }
     }
 }

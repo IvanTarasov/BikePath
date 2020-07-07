@@ -1,9 +1,8 @@
-﻿using BikePath.Models;
+﻿using BikePath;
+using ConsoleUI.GlobalData;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace ConsoleUI.Commands
 {
@@ -20,34 +19,17 @@ namespace ConsoleUI.Commands
 
         public string Execute()
         {
-            string response = string.Empty;
-            BikePathContext db = new BikePathContext();
-
-            Console.WriteLine("           ROUTES" + "\n");
-            Console.WriteLine("  Title     " + "|" + "     Length  " + "\n");
-            var routes = db.Routes.Include(r => r.User).ToList();
+            var routes = ApplicationContext.Context.Routes.Include(r => r.User).ToList();
+            Console.WriteLine("Routes:");
             foreach (var route in routes)
             {
-                Console.WriteLine(route.Title + " | " + route.Length + "\n");
+                Console.WriteLine("  " + route.Title + ": " + route.Length);
             }
 
             Console.Write("Select route: ");
-            string selectRoute = Console.ReadLine();
+            string routeTitle = Console.ReadLine();
 
-            foreach (var route in routes)
-            {
-                if(selectRoute == route.Title)
-                {
-                    BikePathContext bd = new BikePathContext();
-                    GlobalData.User.Distance += route.Length;
-                    bd.Users.Update(GlobalData.User);
-                    bd.SaveChanges();
-
-                    return "Succesfull!";
-                }
-            }
-
-            return "Unknown route!";
+            return DBWorker.UpdateDistanceWithRoute(ref ApplicationContext.Context, ref ActualUser.User, routeTitle);
         }
     }
 }
