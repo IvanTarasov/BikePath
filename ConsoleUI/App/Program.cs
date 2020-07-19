@@ -7,7 +7,7 @@ namespace ConsoleUI
     {
         static void Main(string[] args)
         {
-            bool tested = true;
+            bool tested = false;
             Config.SetConfig(tested);
 
             Shell shell = new Shell();

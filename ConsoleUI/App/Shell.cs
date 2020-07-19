@@ -3,8 +3,10 @@ using BikePath.Models;
 using ConsoleUI.App;
 using ConsoleUI.Commands;
 using ConsoleUI.GlobalData;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace ConsoleUI
 {
@@ -17,7 +19,7 @@ namespace ConsoleUI
             ShellStatus.IsWork = true;
             ApplicationContext.Context = new BikePathContext();
 
-            Registration();
+            GettingAnAccount();
             InitCommands();
             PrintInitialInfo();
             StartGettingCommands();
@@ -82,11 +84,35 @@ namespace ConsoleUI
             return command;
         }
 
-        private void Registration()
+        private void GettingAnAccount()
+        {
+            Console.WriteLine("login or register?");
+            while (true)
+            {
+                string method = GetCommandOfConsole();
+
+                if (method == "login")
+                {
+                    Login();
+                    break;
+                }
+                else if (method == "register")
+                {
+                    Register();
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Incorrect data!");
+                }
+            }
+        }
+
+        private void Login()
         {
             if (Config.Tested)
             {
-                ActualUser.SetUser(UserReg.EnterToAccount("ivan.tarasov12345@gmail.com", "1234509876_Asdivannew"));
+                ActualUser.SetUser(DBWorker.GetExistingUser(ref ApplicationContext.Context, "ivan.tarasov12345@gmail.com", "1234509876_Asdivannew"));
             }
             else
             {
@@ -95,7 +121,7 @@ namespace ConsoleUI
                     string email = GetEmail();
                     string pass = GetPassword();
 
-                    User user = UserReg.EnterToAccount(email, pass);
+                    User user = DBWorker.GetExistingUser(ref ApplicationContext.Context, email, pass);
                     if (user != null)
                     {
                         ActualUser.SetUser(user);
@@ -107,6 +133,24 @@ namespace ConsoleUI
                     }
                 }
             }
+        }
+
+        private void Register()
+        {
+            string name = GetName();
+            string email = GetEmail();
+            string password = GetPassword();
+
+            User user = DBWorker.GetAndSaveNewUser(ref ApplicationContext.Context, name, email, password);
+            ActualUser.SetUser(user);
+        }
+
+        private string GetName()
+        {
+            Console.Write("NAME: ");
+            string name = Console.ReadLine();
+
+            return name;
         }
 
         private string GetEmail()
