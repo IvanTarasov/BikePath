@@ -1,6 +1,4 @@
-﻿using BikePath;
-using ConsoleUI.GlobalData;
-
+﻿
 namespace ConsoleUI.Commands
 {
     class ClearStatCommand : ICommand
@@ -16,8 +14,8 @@ namespace ConsoleUI.Commands
 
         public string Execute()
         {
-            DBWorker.ClearRoutes(ref ApplicationContext.Context);
-            DBWorker.ClearDistance(ref ApplicationContext.Context, ref ActualUser.User);
+            Shell.DBWorker.ClearRoutes();
+            Shell.DBWorker.ClearDistance(ref Shell.CurrentUser);
 
             return "statistics successfully cleared";
         }

@@ -1,5 +1,4 @@
-﻿using ConsoleUI.GlobalData;
-
+﻿
 namespace ConsoleUI.Commands
 {
     class OutCommand : ICommand
@@ -15,7 +14,7 @@ namespace ConsoleUI.Commands
 
         public string Execute()
         {
-            ShellStatus.IsWork = false;
+            Shell.WorkStatus = Shell.DISABLE;
             return "Goodbye!";
         }
     }

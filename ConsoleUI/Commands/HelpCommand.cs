@@ -1,5 +1,4 @@
-﻿using ConsoleUI.GlobalData;
-using System;
+﻿using System;
 
 namespace ConsoleUI.Commands
 {
@@ -16,7 +15,7 @@ namespace ConsoleUI.Commands
 
         public string Execute()
         {
-            foreach (var command in CommandList.Commands)
+            foreach (var command in Shell.Commands)
             {
                 Console.WriteLine(command.GetInfo());
             }

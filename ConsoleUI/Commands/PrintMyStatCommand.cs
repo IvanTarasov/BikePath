@@ -1,8 +1,4 @@
-﻿using BikePath.Models;
-using ConsoleUI.GlobalData;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Linq;
+﻿using System;
 
 namespace ConsoleUI.Commands
 {
@@ -19,14 +15,11 @@ namespace ConsoleUI.Commands
 
         public string Execute()
         {
-            User user = ActualUser.User;
-            var routes = ApplicationContext.Context.Routes.Include(r => r.User).ToList();
-
-            Console.WriteLine("User: " + user.Name);
-            Console.WriteLine("Email: " + user.Email);
-            Console.WriteLine("Distance: " + user.Distance);
+            Console.WriteLine("User: " + Shell.CurrentUser.Name);
+            Console.WriteLine("Email: " + Shell.CurrentUser.Email);
+            Console.WriteLine("Distance: " + Shell.CurrentUser.Distance);
             Console.WriteLine("Routes:");
-            foreach (var route in routes)
+            foreach (var route in Shell.DBWorker.GetUserRoutes())
             {
                 Console.WriteLine("  " + route.Title + ": " + route.Length);
             }

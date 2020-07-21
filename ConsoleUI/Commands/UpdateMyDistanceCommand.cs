@@ -1,6 +1,4 @@
-﻿using BikePath;
-using ConsoleUI.GlobalData;
-using System;
+﻿using System;
 
 namespace ConsoleUI.Commands
 {
@@ -21,8 +19,7 @@ namespace ConsoleUI.Commands
 
             while (true)
             {
-                Console.Write("Distance traveled: ");
-                string len = Console.ReadLine();
+                string len = Shell.GetData("distance");
 
                 if (double.TryParse(len, out length))
                 {
@@ -34,7 +31,7 @@ namespace ConsoleUI.Commands
                 }
             }
 
-            DBWorker.UpdateDistance(ref ApplicationContext.Context, ref ActualUser.User, length);
+            Shell.DBWorker.UpdateDistance(ref Shell.CurrentUser, length);
             return "distance updated";
         }
     }

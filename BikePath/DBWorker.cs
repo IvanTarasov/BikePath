@@ -1,24 +1,34 @@
 ﻿using BikePath.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace BikePath
 {
-    public static class DBWorker
+    public class DBWorker
     {
-        // clear all routes of DB
-        public static void ClearRoutes(ref BikePathContext db)
+        private BikePathContext db;
+
+        public DBWorker()
         {
-            var routes = db.Routes.Include(r => r.User).ToList();
-            foreach (var route in routes)
-            {
-                db.Routes.Remove(route);
-            }
+            db = new BikePathContext();
+        }
+
+        public List<Route> GetUserRoutes()
+        {
+            return db.Routes.Include(r => r.User).ToList();
+        }
+
+        // clear all routes of DB
+        public void ClearRoutes()
+        {
+            var routes = GetUserRoutes();
+            db.Routes.RemoveRange(routes);
             db.SaveChanges();
         }
 
         // clear user distanse
-        public static void ClearDistance(ref BikePathContext db, ref User user)
+        public void ClearDistance(ref User user)
         {
             user.Distance = 0;
             db.Users.Update(user);
@@ -26,31 +36,36 @@ namespace BikePath
         }
 
         // add new route in DB
-        public static void AddRoute(ref BikePathContext db, Route route)
+        public void AddRoute(string routeTitle, double routeLength, ref User user)
         {
+            Route route = new Route { Title = routeTitle, Length = routeLength, User = user};
+
             db.Routes.Add(route);
             db.SaveChanges();
         }
 
         // remove route through title
-        public static string RemoveRoute(ref BikePathContext db, string routeTitle)
+        public string RemoveRoute(string routeTitle)
         {
             string response = "there is no such route";
-            foreach (var route in db.Routes)
+
+            var routes = GetUserRoutes();
+            foreach (var route in routes)
             {
-                if(routeTitle == route.Title)
+                if (routeTitle == route.Title)
                 {
                     db.Routes.Remove(route);
-
                     response = "route removed";
+                    break;
                 }
             }
+
             db.SaveChanges();
             return response;
         }
 
         // increases user distance
-        public static void UpdateDistance(ref BikePathContext db, ref User user, double length)
+        public void UpdateDistance(ref User user, double length)
         {
             user.Distance += length;
             db.Users.Update(user);
@@ -58,10 +73,12 @@ namespace BikePath
         }
 
         // increases user distance through route length
-        public static string UpdateDistanceWithRoute(ref BikePathContext db, ref User user, string routeTitle)
+        public string UpdateDistanceWithRoute(ref User user, string routeTitle)
         {
             string response = "there is no such route";
-            foreach (var route in db.Routes)
+
+            var routes = GetUserRoutes();
+            foreach (var route in routes)
             {
                 if (routeTitle == route.Title)
                 {
@@ -69,6 +86,7 @@ namespace BikePath
                     db.Users.Update(user);
 
                     response =  "distance updated";
+                    break;
                 }
             }
 
@@ -77,7 +95,7 @@ namespace BikePath
         }
 
         // search and return the existing user
-        public static User GetExistingUser(ref BikePathContext db, string email, string password)
+        public User GetExistingUser(string email, string password)
         {
             foreach (var user in db.Users)
             {
@@ -91,7 +109,7 @@ namespace BikePath
         }
 
         // create, save and return new user
-        public static User GetAndSaveNewUser(ref BikePathContext db, string name, string email, string password)
+        public User GetAndSaveNewUser(string name, string email, string password)
         {
             User newUser = new User { Name = name, Email = email, Password = password, Distance = 0 };
             db.Users.Add(newUser);

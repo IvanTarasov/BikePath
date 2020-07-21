@@ -1,31 +1,33 @@
 ﻿using BikePath;
 using BikePath.Models;
-using ConsoleUI.App;
 using ConsoleUI.Commands;
-using ConsoleUI.GlobalData;
-using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 
 namespace ConsoleUI
 {
-    class Shell
+    static class Shell
     {
-        private List<ICommand> Commands;
+        public static List<ICommand> Commands { get; private set; }
+        public static string WorkStatus { get; set; }
+        public static DBWorker DBWorker { get; private set; }
+        public static User CurrentUser;
 
-        public void Start()
+        public const string ACTIVE = "ACTIVE";
+        public const string DISABLE = "DISABLE";
+
+        public static void Start()
         {
-            ShellStatus.IsWork = true;
-            ApplicationContext.Context = new BikePathContext();
+            WorkStatus = ACTIVE;
+            DBWorker = new DBWorker();
 
-            GettingAnAccount();
+            GetCurrentUser();
             InitCommands();
             PrintInitialInfo();
             StartGettingCommands();
         }
 
-        private void InitCommands()
+        private static void InitCommands()
         {
             Commands = new List<ICommand>();
 
@@ -39,11 +41,9 @@ namespace ConsoleUI
             Commands.Add(new RemoveRouteCommand());
 
             // add new commands here
-
-            CommandList.SetCommands(Commands);
         }
 
-        private void PrintInitialInfo()
+        private static void PrintInitialInfo()
         {
             Console.WriteLine("Bike Path console UI");
             Console.WriteLine("Author - Ivan Tarasov");
@@ -52,9 +52,9 @@ namespace ConsoleUI
             Console.WriteLine("/ / / / / / / / / / / / / / / / / / /");
         }
 
-        private void StartGettingCommands()
+        private static void StartGettingCommands()
         {
-            while (ShellStatus.IsWork)
+            while (WorkStatus == ACTIVE)
             {
                 string commandStr = GetCommandOfConsole();
                 bool commandIsFound = false;
@@ -65,7 +65,12 @@ namespace ConsoleUI
                     {
                         commandIsFound = true;
                         string messageOfCommand = command.Execute();
+
+                        Console.WriteLine();
+                        Console.ForegroundColor = ConsoleColor.Green;
                         Console.WriteLine("message: {0}", messageOfCommand);
+                        Console.ResetColor();
+                        Console.WriteLine();
                     }
                 }
 
@@ -76,7 +81,7 @@ namespace ConsoleUI
             }
         }
 
-        private string GetCommandOfConsole()
+        private static string GetCommandOfConsole()
         {
             Console.Write(">>> ");
             string command = Console.ReadLine();
@@ -84,7 +89,7 @@ namespace ConsoleUI
             return command;
         }
 
-        private void GettingAnAccount()
+        private static void GetCurrentUser()
         {
             Console.WriteLine("login or register?");
             while (true)
@@ -108,65 +113,41 @@ namespace ConsoleUI
             }
         }
 
-        private void Login()
+        private static void Login()
         {
-            if (Config.Tested)
+            while (true)
             {
-                ActualUser.SetUser(DBWorker.GetExistingUser(ref ApplicationContext.Context, "ivan.tarasov12345@gmail.com", "1234509876_Asdivannew"));
-            }
-            else
-            {
-                while (true)
-                {
-                    string email = GetEmail();
-                    string pass = GetPassword();
+                string email = GetData("email");
+                string pass = GetData("password");
 
-                    User user = DBWorker.GetExistingUser(ref ApplicationContext.Context, email, pass);
-                    if (user != null)
-                    {
-                        ActualUser.SetUser(user);
-                        break;
-                    }
-                    else
-                    {
-                        Console.WriteLine("Incorrect email or password, pleace try again");
-                    }
+                User user = DBWorker.GetExistingUser(email, pass);
+                if (user != null)
+                {
+                    CurrentUser = user;
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Incorrect email or password, pleace try again");
                 }
             }
         }
 
-        private void Register()
+        private static void Register()
         {
-            string name = GetName();
-            string email = GetEmail();
-            string password = GetPassword();
+            string name = GetData("name");
+            string email = GetData("email");
+            string password = GetData("password");
 
-            User user = DBWorker.GetAndSaveNewUser(ref ApplicationContext.Context, name, email, password);
-            ActualUser.SetUser(user);
+            CurrentUser = DBWorker.GetAndSaveNewUser(name, email, password);
         }
 
-        private string GetName()
+        public static string GetData(string dataType)
         {
-            Console.Write("NAME: ");
-            string name = Console.ReadLine();
+            Console.Write(dataType.ToUpper() + ": ");
+            string data = Console.ReadLine();
 
-            return name;
-        }
-
-        private string GetEmail()
-        {
-            Console.Write("EMAIL: ");
-            string email = Console.ReadLine();
-
-            return email;
-        }
-
-        private string GetPassword()
-        {
-            Console.Write("PASSWORD: ");
-            string pass = Console.ReadLine();
-
-            return pass;
+            return data;
         }
     }
 }
