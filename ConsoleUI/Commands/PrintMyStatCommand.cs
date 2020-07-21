@@ -1,9 +1,4 @@
-﻿using BikePath.Models;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System;
 
 namespace ConsoleUI.Commands
 {
@@ -20,30 +15,16 @@ namespace ConsoleUI.Commands
 
         public string Execute()
         {
-            string response = string.Empty;
-            User user = GlobalData.User;
-            BikePathContext db = new BikePathContext();
-
-
-            response += "User: " + user.Name + "\n"
-                      + "Email: " + user.Email + "\n"
-                      + "Distance: " + user.Distance + "\n" + "\n";
-
-            response += "           ROUTES" + "\n";
-            response += "  Title     " + "|" + "     Length  " + "\n";
-
-            var routes = db.Routes.Include(r => r.User).ToList();
-            foreach (var route in routes)
+            Console.WriteLine("User: " + Shell.CurrentUser.Name);
+            Console.WriteLine("Email: " + Shell.CurrentUser.Email);
+            Console.WriteLine("Distance: " + Shell.CurrentUser.Distance);
+            Console.WriteLine("Routes:");
+            foreach (var route in Shell.DBWorker.GetUserRoutes())
             {
-                response += route.Title + " | " + route.Length + "\n";
+                Console.WriteLine("  " + route.Title + ": " + route.Length);
             }
 
-            return response;
-        }
-
-        public override string ToString()
-        {
-            return Name + ": " + Description;
+            return "statistics printed";
         }
     }
 }

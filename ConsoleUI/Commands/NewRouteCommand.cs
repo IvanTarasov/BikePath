@@ -1,8 +1,6 @@
-﻿using BikePath.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using BikePath;
+using BikePath.Models;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ConsoleUI.Commands
 {
@@ -19,17 +17,13 @@ namespace ConsoleUI.Commands
 
         public string Execute()
         {
-            string response = string.Empty;
-
-            Console.WriteLine("NEW ROUTE:");
-            Console.Write(" TITLE: ");
-            string title = Console.ReadLine();
+            Console.WriteLine("[NEW ROUTE]");
+            string title = Shell.GetData("title");
             double length;
 
             while (true)
             {
-                Console.Write(" LENGTH: ");
-                string len = Console.ReadLine();
+                string len = Shell.GetData("length");
 
                 if (double.TryParse(len, out length))
                 {
@@ -40,22 +34,9 @@ namespace ConsoleUI.Commands
                     Console.WriteLine("Incorrect length!");
                 }
             }
+            Shell.DBWorker.AddRoute(title, length, ref Shell.CurrentUser);
 
-            BikePathContext db = new BikePathContext();
-            db.Routes.Add(new Route { Title = title, Length = length, User = GlobalData.User });
-
-            var entry = db.Entry(GlobalData.User);
-            entry.State = EntityState.Unchanged;
-
-            db.SaveChanges();
-
-            response = "Succesfull!";
-            return response;
-        }
-
-        public override string ToString()
-        {
-            return Name + ": " + Description;
+            return "route added successfully";
         }
     }
 }

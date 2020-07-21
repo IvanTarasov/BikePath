@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
+﻿
 namespace ConsoleUI.Commands
 {
     class OutCommand : ICommand
@@ -17,13 +14,8 @@ namespace ConsoleUI.Commands
 
         public string Execute()
         {
-            GlobalData.ShellIsWork = false;
+            Shell.WorkStatus = Shell.DISABLE;
             return "Goodbye!";
-        }
-
-        public override string ToString()
-        {
-            return Name + ": " + Description;
         }
     }
 }

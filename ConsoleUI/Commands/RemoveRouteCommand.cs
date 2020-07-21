@@ -1,9 +1,4 @@
-﻿using BikePath.Models;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System;
 
 namespace ConsoleUI.Commands
 {
@@ -20,37 +15,15 @@ namespace ConsoleUI.Commands
 
         public string Execute()
         {
-            string response = string.Empty;
-
-            BikePathContext db = new BikePathContext();
-            Console.WriteLine("           ROUTES" + "\n");
-            Console.WriteLine("  Title     " + "|" + "     Length  " + "\n");
-            var routes = db.Routes.Include(r => r.User).ToList();
-            foreach (var route in routes)
+            Console.WriteLine("Routes:");
+            foreach (var route in Shell.DBWorker.GetUserRoutes())
             {
-                Console.WriteLine(route.Title + " | " + route.Length + "\n");
+                Console.WriteLine("  " + route.Title + ": " + route.Length);
             }
 
-            Console.Write("Select route: ");
-            string selectRoute = Console.ReadLine();
+            string routeTitle = Shell.GetData("route");
 
-            foreach (var route in routes)
-            {
-                if (selectRoute == route.Title)
-                {
-                    db.Routes.Remove(route);
-                    db.SaveChanges();
-
-                    return "Success!";
-                }
-            }
-
-            return "Unknown route!";
-        }
-
-        public override string ToString()
-        {
-            return Name + ": " + Description;
+            return Shell.DBWorker.RemoveRoute(routeTitle);
         }
     }
 }

@@ -1,7 +1,4 @@
-﻿using BikePath.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
 
 namespace ConsoleUI.Commands
 {
@@ -18,13 +15,11 @@ namespace ConsoleUI.Commands
 
         public string Execute()
         {
-            string response = string.Empty;
             double length;
 
             while (true)
             {
-                Console.Write("Distance traveled: ");
-                string len = Console.ReadLine();
+                string len = Shell.GetData("distance");
 
                 if (double.TryParse(len, out length))
                 {
@@ -36,18 +31,8 @@ namespace ConsoleUI.Commands
                 }
             }
 
-            BikePathContext db = new BikePathContext();
-            GlobalData.User.Distance += length;
-            db.Users.Update(GlobalData.User);
-            db.SaveChanges();
-
-            response = "Succesfull!";
-            return response;
-        }
-
-        public override string ToString()
-        {
-            return Name + ": " + Description;
+            Shell.DBWorker.UpdateDistance(ref Shell.CurrentUser, length);
+            return "distance updated";
         }
     }
 }

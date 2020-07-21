@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ConsoleUI
+﻿namespace ConsoleUI
 {
     interface ICommand
     {
@@ -12,6 +8,8 @@ namespace ConsoleUI
 
         string Execute();
 
-        // override ToString() for normal work 
+        string GetInfo() {
+            return Name + ": " + Description;
+        } 
     }
 }
