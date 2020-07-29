@@ -1,5 +1,6 @@
 ﻿using BikePath;
 using BikePath.Models;
+using ConsoleUI.App;
 using ConsoleUI.Commands;
 using System;
 using System.Collections.Generic;
@@ -9,8 +10,8 @@ namespace ConsoleUI
     static class Shell
     {
         public static List<ICommand> Commands { get; private set; }
-        public static string WorkStatus { get; set; }
         public static DBWorker DBWorker { get; private set; }
+        public static string WorkStatus { get; set; }
         public static User CurrentUser;
 
         public const string ACTIVE = "ACTIVE";
@@ -23,8 +24,32 @@ namespace ConsoleUI
 
             GetCurrentUser();
             InitCommands();
-            PrintInitialInfo();
+
+            ConsoleDrawer.PrintInitialInfo();
             StartGettingCommands();
+        }
+
+        private static void GetCurrentUser()
+        {
+            while (true)
+            {
+                string method = GetData("login or register?");
+
+                if (method == "login")
+                {
+                    Login();
+                    break;
+                }
+                else if (method == "register")
+                {
+                    Register();
+                    break;
+                }
+                else
+                {
+                    ConsoleDrawer.DrawMessage(new DBMessage("INCORRECT DATA!", "ERROR"));
+                }
+            }
         }
 
         private static void InitCommands()
@@ -39,77 +64,25 @@ namespace ConsoleUI
             Commands.Add(new UpdateMyDistanceWithRouteCommand());
             Commands.Add(new ClearStatCommand());
             Commands.Add(new RemoveRouteCommand());
-
             // add new commands here
-        }
-
-        private static void PrintInitialInfo()
-        {
-            Console.WriteLine("Bike Path console UI");
-            Console.WriteLine("Author - Ivan Tarasov");
-            Console.WriteLine("=====================================");
-            Console.WriteLine("Type 'help' to get a list of commands");
-            Console.WriteLine("/ / / / / / / / / / / / / / / / / / /");
         }
 
         private static void StartGettingCommands()
         {
             while (WorkStatus == ACTIVE)
             {
-                string commandStr = GetCommandOfConsole();
+                string commandStr = GetCommand();
                 bool commandIsFound = false;
 
                 foreach (var command in Commands)
-                {
                     if (commandStr == command.Name)
                     {
+                        command.Execute();
                         commandIsFound = true;
-                        string messageOfCommand = command.Execute();
-
-                        Console.WriteLine();
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        Console.WriteLine("message: {0}", messageOfCommand);
-                        Console.ResetColor();
-                        Console.WriteLine();
                     }
-                }
 
                 if (!commandIsFound)
-                {
-                    Console.WriteLine("COMMAND NOT FOUND");
-                }
-            }
-        }
-
-        private static string GetCommandOfConsole()
-        {
-            Console.Write(">>> ");
-            string command = Console.ReadLine();
-
-            return command;
-        }
-
-        private static void GetCurrentUser()
-        {
-            Console.WriteLine("login or register?");
-            while (true)
-            {
-                string method = GetCommandOfConsole();
-
-                if (method == "login")
-                {
-                    Login();
-                    break;
-                }
-                else if (method == "register")
-                {
-                    Register();
-                    break;
-                }
-                else
-                {
-                    Console.WriteLine("Incorrect data!");
-                }
+                    ConsoleDrawer.DrawMessage(new DBMessage("COMMAND NOT FOUND!", "ERROR"));
             }
         }
 
@@ -128,7 +101,7 @@ namespace ConsoleUI
                 }
                 else
                 {
-                    Console.WriteLine("Incorrect email or password, pleace try again");
+                    ConsoleDrawer.DrawMessage(new DBMessage("INCORRECT EMAIL OR PASSWORD!", "ERROR"));
                 }
             }
         }
@@ -136,10 +109,40 @@ namespace ConsoleUI
         private static void Register()
         {
             string name = GetData("name");
-            string email = GetData("email");
+            string email = GetVerifiedEmail();
             string password = GetData("password");
 
             CurrentUser = DBWorker.GetAndSaveNewUser(name, email, password);
+        }
+
+        private static string GetVerifiedEmail()
+        {
+            string email;
+            while (true)
+            {
+                email = GetData("email");
+                EmailSender emailSender = new EmailSender();
+
+                emailSender.SendVerifyCode(email);
+                string userCode = GetData("code");
+
+                if (userCode == emailSender.VERIFY_CODE)
+                {
+                    return email;
+                }
+                else
+                {
+                    ConsoleDrawer.DrawMessage(new DBMessage("INCORRECT EMAIL!", "ERROR"));
+                }
+            }
+        }
+
+        private static string GetCommand()
+        {
+            Console.Write(">>> ");
+            string command = Console.ReadLine();
+
+            return command;
         }
 
         public static string GetData(string dataType)

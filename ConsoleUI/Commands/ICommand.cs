@@ -6,7 +6,7 @@
 
         string Description { get; }
 
-        string Execute();
+        void Execute();
 
         string GetInfo() {
             return Name + ": " + Description;
