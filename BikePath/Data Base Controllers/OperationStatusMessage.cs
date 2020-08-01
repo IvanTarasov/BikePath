@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace BikePath
 {
-    public class DBMessage
+    public class OperationStatusMessage
     {
         public string Text { get; private set; }
         public string Type { get; private set; } // ERROR or SUCCESS
 
-        public DBMessage(string text, string type)
+        public OperationStatusMessage(string text, string type)
         {
             Text = text;
             Type = type;

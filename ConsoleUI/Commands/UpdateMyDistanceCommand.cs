@@ -29,7 +29,7 @@ namespace ConsoleUI.Commands
                 }
                 else
                 {
-                    ConsoleDrawer.DrawMessage(new DBMessage("Incorrect length!", "ERROR"));
+                    ConsoleDrawer.DrawMessage(new OperationStatusMessage("Incorrect length!", "ERROR"));
                 }
             }
             ConsoleDrawer.DrawMessage(Shell.DBWorker.UpdateDistance(ref Shell.CurrentUser, length));

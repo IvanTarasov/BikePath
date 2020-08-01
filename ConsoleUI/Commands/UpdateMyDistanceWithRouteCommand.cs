@@ -18,11 +18,11 @@ namespace ConsoleUI.Commands
 
         public void Execute()
         {
-            List<Route> routes = Shell.DBWorker.GetUserRoutes();
+            List<Route> routes = Shell.DBWorker.GetUserRoutes(Shell.CurrentUser);
             if (routes != null)
             {
                 Console.WriteLine("Routes:");
-                foreach (var route in Shell.DBWorker.GetUserRoutes())
+                foreach (var route in Shell.DBWorker.GetUserRoutes(Shell.CurrentUser))
                 {
                     Console.WriteLine("  " + route.Title + ": " + route.Length);
                 }

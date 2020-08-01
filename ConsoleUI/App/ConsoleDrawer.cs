@@ -1,14 +1,11 @@
 ﻿using BikePath;
 using System;
-using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
 
 namespace ConsoleUI.App
 {
     static class ConsoleDrawer
     {
-        public static void DrawMessage(DBMessage message)
+        public static void DrawMessage(OperationStatusMessage message)
         {
             switch (message.Type.ToUpper())
             {

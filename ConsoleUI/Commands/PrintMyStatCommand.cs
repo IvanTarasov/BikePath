@@ -22,7 +22,7 @@ namespace ConsoleUI.Commands
             Console.WriteLine("Distance: " + Shell.CurrentUser.Distance);
             Console.WriteLine("Routes:");
 
-            List<Route> routes = Shell.DBWorker.GetUserRoutes();
+            List<Route> routes = Shell.DBWorker.GetUserRoutes(Shell.CurrentUser);
             if (routes != null)
             {
                 foreach (var route in routes)

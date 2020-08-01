@@ -31,7 +31,7 @@ namespace ConsoleUI.Commands
                 }
                 else
                 {
-                    ConsoleDrawer.DrawMessage(new DBMessage("Incorrect length!", "ERROR"));
+                    ConsoleDrawer.DrawMessage(new OperationStatusMessage("Incorrect length!", "ERROR"));
                 }
             }
             ConsoleDrawer.DrawMessage(Shell.DBWorker.AddRoute(title, length, ref Shell.CurrentUser));

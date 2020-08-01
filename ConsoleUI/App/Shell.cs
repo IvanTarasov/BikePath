@@ -47,7 +47,7 @@ namespace ConsoleUI
                 }
                 else
                 {
-                    ConsoleDrawer.DrawMessage(new DBMessage("INCORRECT DATA!", "ERROR"));
+                    ConsoleDrawer.DrawMessage(new OperationStatusMessage("INCORRECT DATA!", "ERROR"));
                 }
             }
         }
@@ -82,7 +82,7 @@ namespace ConsoleUI
                     }
 
                 if (!commandIsFound)
-                    ConsoleDrawer.DrawMessage(new DBMessage("COMMAND NOT FOUND!", "ERROR"));
+                    ConsoleDrawer.DrawMessage(new OperationStatusMessage("COMMAND NOT FOUND!", "ERROR"));
             }
         }
 
@@ -101,7 +101,7 @@ namespace ConsoleUI
                 }
                 else
                 {
-                    ConsoleDrawer.DrawMessage(new DBMessage("INCORRECT EMAIL OR PASSWORD!", "ERROR"));
+                    ConsoleDrawer.DrawMessage(new OperationStatusMessage("INCORRECT EMAIL OR PASSWORD!", "ERROR"));
                 }
             }
         }
@@ -117,22 +117,22 @@ namespace ConsoleUI
 
         private static string GetVerifiedEmail()
         {
-            string email;
+            string email = GetData("email");
+            EmailSender emailSender = new EmailSender();
             while (true)
             {
-                email = GetData("email");
-                EmailSender emailSender = new EmailSender();
-
+                Console.WriteLine("Verification code has been sent to your email");
                 emailSender.SendVerifyCode(email);
                 string userCode = GetData("code");
 
                 if (userCode == emailSender.VERIFY_CODE)
                 {
+                    ConsoleDrawer.DrawMessage(new OperationStatusMessage("EMAIL CONFRIMED SUCCESSFULLY", "SUCCESS"));
                     return email;
                 }
                 else
                 {
-                    ConsoleDrawer.DrawMessage(new DBMessage("INCORRECT EMAIL!", "ERROR"));
+                    ConsoleDrawer.DrawMessage(new OperationStatusMessage("INCORRECT CODE!", "ERROR"));
                 }
             }
         }

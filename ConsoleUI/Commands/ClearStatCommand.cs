@@ -15,7 +15,7 @@ namespace ConsoleUI.Commands
 
         public void Execute()
         { 
-            ConsoleDrawer.DrawMessage(Shell.DBWorker.ClearRoutes());
+            ConsoleDrawer.DrawMessage(Shell.DBWorker.ClearRoutes(Shell.CurrentUser));
             ConsoleDrawer.DrawMessage(Shell.DBWorker.ClearDistance(ref Shell.CurrentUser));
         }
     }
