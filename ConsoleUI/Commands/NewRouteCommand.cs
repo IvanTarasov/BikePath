@@ -1,5 +1,5 @@
 ﻿using BikePath;
-using BikePath.Models;
+using ConsoleUI.App;
 using System;
 
 namespace ConsoleUI.Commands
@@ -15,7 +15,7 @@ namespace ConsoleUI.Commands
             Description = "add new route";
         }
 
-        public string Execute()
+        public void Execute()
         {
             Console.WriteLine("[NEW ROUTE]");
             string title = Shell.GetData("title");
@@ -31,12 +31,10 @@ namespace ConsoleUI.Commands
                 }
                 else
                 {
-                    Console.WriteLine("Incorrect length!");
+                    ConsoleDrawer.DrawMessage(new OperationStatusMessage("Incorrect length!", "ERROR"));
                 }
             }
-            Shell.DBWorker.AddRoute(title, length, ref Shell.CurrentUser);
-
-            return "route added successfully";
+            ConsoleDrawer.DrawMessage(Shell.DBWorker.AddRoute(title, length, ref Shell.CurrentUser));
         }
     }
 }

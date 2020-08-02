@@ -1,4 +1,6 @@
-﻿using System;
+﻿using BikePath.Models;
+using System;
+using System.Collections.Generic;
 
 namespace ConsoleUI.Commands
 {
@@ -13,18 +15,21 @@ namespace ConsoleUI.Commands
             Description = "displays your statistics";
         }
 
-        public string Execute()
+        public void Execute()
         {
             Console.WriteLine("User: " + Shell.CurrentUser.Name);
             Console.WriteLine("Email: " + Shell.CurrentUser.Email);
             Console.WriteLine("Distance: " + Shell.CurrentUser.Distance);
             Console.WriteLine("Routes:");
-            foreach (var route in Shell.DBWorker.GetUserRoutes())
-            {
-                Console.WriteLine("  " + route.Title + ": " + route.Length);
-            }
 
-            return "statistics printed";
+            List<Route> routes = Shell.DBWorker.GetUserRoutes(Shell.CurrentUser);
+            if (routes != null)
+            {
+                foreach (var route in routes)
+                {
+                    Console.WriteLine("  " + route.Title + ": " + route.Length);
+                }
+            }
         }
     }
 }

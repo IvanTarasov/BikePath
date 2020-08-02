@@ -13,14 +13,12 @@ namespace ConsoleUI.Commands
             Description = "lists available commands";
         }
 
-        public string Execute()
+        public void Execute()
         {
             foreach (var command in Shell.Commands)
             {
                 Console.WriteLine(command.GetInfo());
             }
-
-            return "command list received";
         }
     }
 }

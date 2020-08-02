@@ -1,4 +1,6 @@
-﻿
+﻿using BikePath;
+using ConsoleUI.App;
+
 namespace ConsoleUI.Commands
 {
     class OutCommand : ICommand
@@ -12,10 +14,10 @@ namespace ConsoleUI.Commands
             Description = "close application";
         }
 
-        public string Execute()
+        public void Execute()
         {
             Shell.WorkStatus = Shell.DISABLE;
-            return "Goodbye!";
+            ConsoleDrawer.DrawMessage(new OperationStatusMessage("Goodbye!", "SUCCESS"));
         }
     }
 }

@@ -1,4 +1,7 @@
-﻿using System;
+﻿using BikePath.Models;
+using ConsoleUI.App;
+using System;
+using System.Collections.Generic;
 
 namespace ConsoleUI.Commands
 {
@@ -13,17 +16,21 @@ namespace ConsoleUI.Commands
             Description = "updates your distance using an existing route";
         }
 
-        public string Execute()
+        public void Execute()
         {
-            Console.WriteLine("Routes:");
-            foreach (var route in Shell.DBWorker.GetUserRoutes())
+            List<Route> routes = Shell.DBWorker.GetUserRoutes(Shell.CurrentUser);
+            if (routes != null)
             {
-                Console.WriteLine("  " + route.Title + ": " + route.Length);
+                Console.WriteLine("Routes:");
+                foreach (var route in Shell.DBWorker.GetUserRoutes(Shell.CurrentUser))
+                {
+                    Console.WriteLine("  " + route.Title + ": " + route.Length);
+                }
             }
 
             string routeTitle = Shell.GetData("route");
 
-            return Shell.DBWorker.UpdateDistanceWithRoute(ref Shell.CurrentUser, routeTitle);
+            ConsoleDrawer.DrawMessage(Shell.DBWorker.UpdateDistanceWithRoute(ref Shell.CurrentUser, routeTitle));
         }
     }
 }

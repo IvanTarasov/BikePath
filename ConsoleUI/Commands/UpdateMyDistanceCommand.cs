@@ -1,4 +1,6 @@
-﻿using System;
+﻿using BikePath;
+using ConsoleUI.App;
+using System;
 
 namespace ConsoleUI.Commands
 {
@@ -13,7 +15,7 @@ namespace ConsoleUI.Commands
             Description = "updates your distance using distance input";
         }
 
-        public string Execute()
+        public void Execute()
         {
             double length;
 
@@ -27,12 +29,10 @@ namespace ConsoleUI.Commands
                 }
                 else
                 {
-                    Console.WriteLine("Incorrect length!");
+                    ConsoleDrawer.DrawMessage(new OperationStatusMessage("Incorrect length!", "ERROR"));
                 }
             }
-
-            Shell.DBWorker.UpdateDistance(ref Shell.CurrentUser, length);
-            return "distance updated";
+            ConsoleDrawer.DrawMessage(Shell.DBWorker.UpdateDistance(ref Shell.CurrentUser, length));
         }
     }
 }

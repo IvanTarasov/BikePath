@@ -1,4 +1,5 @@
-﻿
+﻿using ConsoleUI.App;
+
 namespace ConsoleUI.Commands
 {
     class ClearStatCommand : ICommand
@@ -12,12 +13,10 @@ namespace ConsoleUI.Commands
             Description = "clear you statistic (routes and distance)";
         }
 
-        public string Execute()
-        {
-            Shell.DBWorker.ClearRoutes();
-            Shell.DBWorker.ClearDistance(ref Shell.CurrentUser);
-
-            return "statistics successfully cleared";
+        public void Execute()
+        { 
+            ConsoleDrawer.DrawMessage(Shell.DBWorker.ClearRoutes(Shell.CurrentUser));
+            ConsoleDrawer.DrawMessage(Shell.DBWorker.ClearDistance(ref Shell.CurrentUser));
         }
     }
 }

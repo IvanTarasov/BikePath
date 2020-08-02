@@ -1,4 +1,8 @@
-﻿using System;
+﻿using BikePath;
+using BikePath.Models;
+using ConsoleUI.App;
+using System;
+using System.Collections.Generic;
 
 namespace ConsoleUI.Commands
 {
@@ -13,17 +17,20 @@ namespace ConsoleUI.Commands
             Description = "remove changed route";
         }
 
-        public string Execute()
+        public void Execute()
         {
-            Console.WriteLine("Routes:");
-            foreach (var route in Shell.DBWorker.GetUserRoutes())
+            List<Route> routes = Shell.DBWorker.GetUserRoutes(Shell.CurrentUser);
+            if (routes != null)
             {
-                Console.WriteLine("  " + route.Title + ": " + route.Length);
+                Console.WriteLine("Routes:");
+                foreach (var route in Shell.DBWorker.GetUserRoutes(Shell.CurrentUser))
+                {
+                    Console.WriteLine("  " + route.Title + ": " + route.Length);
+                }
+
+                string routeTitle = Shell.GetData("route");
+                ConsoleDrawer.DrawMessage(Shell.DBWorker.RemoveRoute(Shell.CurrentUser, routeTitle));
             }
-
-            string routeTitle = Shell.GetData("route");
-
-            return Shell.DBWorker.RemoveRoute(routeTitle);
         }
     }
 }
