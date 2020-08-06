@@ -15,9 +15,6 @@ namespace ConsoleUI.App
                 case "ERROR":
                     DrawErrorMessage(message.Text);
                     break;
-                default:
-                    DefaultDraw(message.Text);
-                    break;
             }
         }
 
@@ -28,6 +25,15 @@ namespace ConsoleUI.App
             Console.WriteLine("=====================================");
             Console.WriteLine("Type 'help' to get a list of commands");
             Console.WriteLine("/ / / / / / / / / / / / / / / / / / /");
+        }
+
+        public static void PrintLastLog()
+        {
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine(DBLogger.LastLog);
+            Console.ResetColor();
+
+            DBLogger.ClearLastLog();
         }
 
         private static void DrawSuccessMessage(string message)
@@ -44,11 +50,6 @@ namespace ConsoleUI.App
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("\n" + message.ToUpper() + "\n");
             Console.ResetColor();
-        }
-
-        private static void DefaultDraw(string message)
-        {
-            Console.WriteLine(message + "\n");
         }
     }
 }

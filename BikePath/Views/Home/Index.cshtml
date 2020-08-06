@@ -1,34 +1,20 @@
-﻿@model IEnumerable<BikePath.Models.User>;
+﻿@model User
 @{
-    //ViewData["Title"] = "Статистика";
-    Layout = null;
+    ViewData["Title"] = "Главная страница";
 }
-<!DOCTYPE html>
-
-<html>
-<head>
-    <title>Статистика пользователя</title>
-</head>
-<body>
-    <h1>Статистика</h1>
-    <h3>Маршруты</h3>
-    <table>
-        <tr>
-            <td>Название</td>
-            <td>Протяженность</td>
-        </tr>
-        @foreach (var user in Model)
-        {
-            @foreach (var route in user.Routes)
-            {
-                <tr>
-                    <td>@route.Title</td>
-                    <td>@route.Length</td>
-                </tr>
-            }
-        }
-
-
-    </table>
-</body>
-</html>
+<h3>Your stat</h3>
+<table class="table-condensed" >
+    <tr>
+        <td>Name:</td>
+        <td>@Model.Name</td>
+    </tr>
+    <tr>
+        <td>Email:</td>
+        <td>@Model.Email</td>
+    </tr>
+    <tr>
+        <td>Distance:</td>
+        <td>@Model.Distance</td>
+    </tr>
+    <tr><td>ROUTES</td></tr>
+</table>

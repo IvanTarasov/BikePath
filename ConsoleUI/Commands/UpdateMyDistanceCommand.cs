@@ -17,22 +17,8 @@ namespace ConsoleUI.Commands
 
         public void Execute()
         {
-            double length;
-
-            while (true)
-            {
-                string len = Shell.GetData("distance");
-
-                if (double.TryParse(len, out length))
-                {
-                    break;
-                }
-                else
-                {
-                    ConsoleDrawer.DrawMessage(new OperationStatusMessage("Incorrect length!", "ERROR"));
-                }
-            }
-            ConsoleDrawer.DrawMessage(Shell.DBWorker.UpdateDistance(ref Shell.CurrentUser, length));
+            string length = Shell.GetData("distance");
+            DBWorker.UpdateDistance(ref Shell.CurrentUser, length);
         }
     }
 }

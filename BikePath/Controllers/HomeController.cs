@@ -2,8 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using BikePath.Models;
 using Microsoft.EntityFrameworkCore;
+using BikePath;
 
-namespace MobileStore.Controllers
+namespace BikePath.Controllers
 {
     public class HomeController : Controller
     {
@@ -14,7 +15,7 @@ namespace MobileStore.Controllers
         }
         public IActionResult Index()
         {
-            return View(db.Users.ToList());
+            return View(new User());
         }
     }
 }
