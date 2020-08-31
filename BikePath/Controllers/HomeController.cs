@@ -8,14 +8,9 @@ namespace BikePath.Controllers
 {
     public class HomeController : Controller
     {
-        BikePathContext db;
-        public HomeController(BikePathContext context)
+        public ActionResult Index()
         {
-            db = context;
-        }
-        public IActionResult Index()
-        {
-            return View(new User());
+            return View();
         }
     }
 }

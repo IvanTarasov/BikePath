@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BikePath
 {
-    public class DBLogger
+    class DBLogger
     {
         public static string LastLog { get; private set; }
         private const string FILE = "C:/Users/ivant/source/repos/IvanTarasov/BikePath/logs.txt";

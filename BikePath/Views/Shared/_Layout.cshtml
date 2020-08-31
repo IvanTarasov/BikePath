@@ -4,21 +4,38 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"]</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+    <link href="~/lib/twitter-bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/lib/twitter-bootstrap/css/bootstrap-grid.css" rel="stylesheet" />
+    <link href="~/lib/twitter-bootstrap/css/bootstrap-reboot.css" rel="stylesheet" />
+    <link href="~/lib/toastr.js/toastr.css" rel="stylesheet" />
+    <link href="~/css/styles.css" rel="stylesheet"/>
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+
 </head>
 <body>
-    <!--меню-->
-    <nav class="navbar navbar-inverse">
-        <div class="container">
-            <div>
-                <ul class="nav navbar-nav">
-                    <li><a href="~/Home/Index" class="navbar-brand">Main page</a></li>
-                    <li><a href="~/Home/Index" class="navbar-brand">About</a></li>
-                </ul>
-            </div>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light navbar-expand-md m-md-1" >
+        <a class="navbar-brand" href="~/">Bike Path</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav menu-ul">
+                <li class="nav-item active menu-li">
+                    <br />
+                </li>
+                <li class="nav-item active menu-li">
+                    <a href="~/" class="navbar-brand">Main page</a>
+                </li>
+                <li class="nav-item menu-li">
+                    <a href="~/" class="navbar-brand">About</a>
+                </li>
+            </ul>
         </div>
     </nav>
-    <!--основной контент-->
+
     <div class="container body-content">
         @RenderBody()
         <hr />
@@ -26,5 +43,11 @@
             <p>© 2020 - Bike Path</p>
         </footer>
     </div>
+
+    <script src="~/lib/jquery/jquery.min.js"></script>
+    <script src="~/lib/twitter-bootstrap/js/bootstrap.js"></script>
+    <script src="~/lib/toastr.js/toastr.min.js"></script>
+    @RenderSection("Scripts", required: false)
+
 </body>
 </html>
