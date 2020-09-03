@@ -17,7 +17,6 @@ namespace ConsoleUI.Commands
         public void Execute()
         {
             Shell.WorkStatus = Shell.DISABLE;
-            ConsoleDrawer.DrawMessage(new OperationStatusMessage("Goodbye!", "SUCCESS"));
         }
     }
 }

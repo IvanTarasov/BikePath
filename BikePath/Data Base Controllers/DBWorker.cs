@@ -1,57 +1,40 @@
 ﻿using BikePath.Models;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace BikePath
 {
-    public class DBWorker
+    public static class DBWorker
     {
-        private BikePathContext DataBase;
-        private DBLogger Logger;
-
-        public DBWorker()
-        {
-            DataBase = new BikePathContext();
-            Logger = new DBLogger();
-        }
+        private static BikePathContext DataBase = new BikePathContext();
+        private static DBLogger Logger = new DBLogger();
 
         #region Extraction operations
-        public List<Route> GetUserRoutes(User user)
+        public static List<Route> GetUserRoutes(User user)
         {
             try
             {
-                var routes = DataBase.Routes.Include(r => r.User).ToList();
-                List<Route> userRoutes = new List<Route>();
-
-                foreach (var route in routes)
-                    if (route.User == user)
-                        userRoutes.Add(route);
-
-                return userRoutes;
+                var routes = DataBase.Routes.Where(r => r.UserId == user.Id).ToList();
+                return routes;
             }
-            catch (System.Exception e)
+            catch (Exception e)
             {
                 Logger.AddLog(e.Message);
-                return new List<Route>();
+                return null;
             }
         }
 
         // search and return the existing user
-        public User GetExistingUser(string email, string password)
+        public static User GetExistingUser(string email, string password)
         {
             try
             {
-                foreach (var user in DataBase.Users)
-                {
-                    if (email == user.Email && password == user.Password)
-                    {
-                        return user;
-                    }
-                }
-                return null;
+                User user = DataBase.Users.FirstOrDefault(u => (u.Email == email) & (u.Password == password)); 
+                return user;
             }
-            catch (System.Exception e)
+            catch (Exception e)
             {
                 Logger.AddLog(e.Message);
                 return null;
@@ -59,7 +42,7 @@ namespace BikePath
         }
 
         // create, save and return new user
-        public User GetAndSaveNewUser(string name, string email, string password)
+        public static User GetAndSaveNewUser(string name, string email, string password)
         {
             try
             {
@@ -69,7 +52,7 @@ namespace BikePath
 
                 return newUser;
             }
-            catch (System.Exception e)
+            catch (Exception e)
             {
                 Logger.AddLog(e.Message);
                 return null;
@@ -79,107 +62,112 @@ namespace BikePath
 
         #region Change operations
         // clear all user routes of DB
-        public OperationStatusMessage ClearRoutes(User user)
+        public static void ClearRoutes(User user)
         {
+            string log;
             try
             {
                 var routes = GetUserRoutes(user);
                 DataBase.Routes.RemoveRange(routes);
                 DataBase.SaveChanges();
-                return new OperationStatusMessage("Routes cleared", "SUCCESS");
+                log = "Routes cleared";
             }
-            catch (System.Exception e)
+            catch (Exception e)
             {
-                Logger.AddLog(e.Message);
-                return new OperationStatusMessage("Routes not cleared! \nEXCEPTION:" + e.Message, "ERROR");
+                log = "Routes not cleared! \nEXCEPTION:" + e.Message;
             }
+            Logger.AddLog(log);
         }
 
         // clear user distanse
-        public OperationStatusMessage ClearDistance(ref User user)
+        public static void ClearDistance(ref User user)
         {
+            string log;
             try
             {
                 user.Distance = 0;
                 DataBase.Users.Update(user);
                 DataBase.SaveChanges();
-                return new OperationStatusMessage("Distance cleared", "SUCCESS");
+                log = "Distance cleared";
             }
-            catch (System.Exception e)
+            catch (Exception e)
             {
                 Logger.AddLog(e.Message);
-                return new OperationStatusMessage("Distance not cleared! \nEXCEPTION:" + e.Message, "ERROR");
+                log = "Distance not cleared! \nEXCEPTION:" + e.Message;
             }
+            Logger.AddLog(log);
         }
 
         // add new route in DB
-        public OperationStatusMessage AddRoute(string routeTitle, double routeLength, ref User user)
+        public static void AddRoute(string routeTitle, string routeLength, ref User user)
         {
+            string log;
             try
             {
-                Route route = new Route { Title = routeTitle, Length = routeLength, User = user };
+                double length = double.Parse(routeLength);
+                Route route = new Route { Title = routeTitle, Length = length, User = user };
                 DataBase.Routes.Add(route);
                 DataBase.SaveChanges();
-                return new OperationStatusMessage("Route added", "SUCCESS");
+                log = "Route added";
             }
-            catch (System.Exception e)
+            catch (Exception e)
             {
-                Logger.AddLog(e.Message);
-                return new OperationStatusMessage("Route not added! \nEXCEPTION:" + e.Message, "ERROR");
+                log = "Route not added! \nEXCEPTION:" + e.Message;
             }
+            Logger.AddLog(log);
         }
 
         // remove route through title
-        public OperationStatusMessage RemoveRoute(User user, string routeTitle)
+        public static void RemoveRoute(User user, string routeTitle)
         {
+            string log;
             try
             {
                 var routes = GetUserRoutes(user);
-                OperationStatusMessage message = new OperationStatusMessage("there is no such route", "ERROR");
+                log = "there is no such route";
                 foreach (var route in routes)
                 {
                     if (routeTitle == route.Title)
                     {
                         DataBase.Routes.Remove(route);
-                        message = new OperationStatusMessage("route removed", "SUCCESS");
+                        log = "route removed";
                     }
                 }
                 DataBase.SaveChanges();
-                return message;
-
             }
-            catch (System.Exception e)
+            catch (Exception e)
             {
-                Logger.AddLog(e.Message);
-                return new OperationStatusMessage("EXCEPTION: " + e.Message , "ERROR");
+                log = "EXCEPTION: " + e.Message;
             }
+            Logger.AddLog(log);
         }
 
         // increases user distance
-        public OperationStatusMessage UpdateDistance(ref User user, double length)
+        public static void UpdateDistance(ref User user, string length)
         {
+            string log;
             try
             {
-                user.Distance += length;
+                user.Distance += double.Parse(length);
                 DataBase.Users.Update(user);
                 DataBase.SaveChanges();
 
-                return new OperationStatusMessage("distance updated", "SUCCESS");
+                log = "distance updated";
             }
-            catch (System.Exception e)
+            catch (Exception e)
             {
-                Logger.AddLog(e.Message);
-                return new OperationStatusMessage("distance not updated! \nEXCEPTION:" + e.Message, "ERROR");
+                log = "distance not updated! \nEXCEPTION:" + e.Message;
             }
-
+            Logger.AddLog(log);
         }
 
         // increases user distance through route length
-        public OperationStatusMessage UpdateDistanceWithRoute(ref User user, string routeTitle)
+        public static void UpdateDistanceWithRoute(ref User user, string routeTitle)
         {
+            string log;
             try
             {
-                OperationStatusMessage message = new OperationStatusMessage("there is no such route", "ERROR");
+                log = "there is no such route";
                 var routes = GetUserRoutes(user);
                 foreach (var route in routes)
                 {
@@ -187,20 +175,18 @@ namespace BikePath
                     {
                         user.Distance += route.Length;
                         DataBase.Users.Update(user);
-                        message = new OperationStatusMessage("distance updated", "SUCCESS");
+                        log = "distance updated";
                         break;
                     }
                 }
 
                 DataBase.SaveChanges();
-                return message;
             }
-            catch (System.Exception e)
+            catch (Exception e)
             {
-                Logger.AddLog(e.Message);
-                return new OperationStatusMessage("EXCEPTION:" + e.Message, "ERROR");
+                log = "EXCEPTION:" + e.Message;
             }
-
+            Logger.AddLog(log);
         }
         #endregion
     }

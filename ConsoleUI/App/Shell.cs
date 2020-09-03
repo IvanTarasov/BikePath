@@ -10,7 +10,6 @@ namespace ConsoleUI
     static class Shell
     {
         public static List<ICommand> Commands { get; private set; }
-        public static DBWorker DBWorker { get; private set; }
         public static string WorkStatus { get; set; }
         public static User CurrentUser;
 
@@ -20,7 +19,6 @@ namespace ConsoleUI
         public static void Start()
         {
             WorkStatus = ACTIVE;
-            DBWorker = new DBWorker();
 
             GetCurrentUser();
             InitCommands();
@@ -78,6 +76,7 @@ namespace ConsoleUI
                     if (commandStr == command.Name)
                     {
                         command.Execute();
+                        ConsoleDrawer.PrintLastLog();
                         commandIsFound = true;
                     }
 

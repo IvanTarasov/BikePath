@@ -1,4 +1,5 @@
-﻿using BikePath.Models;
+﻿using BikePath;
+using BikePath.Models;
 using System;
 using System.Collections.Generic;
 
@@ -22,7 +23,7 @@ namespace ConsoleUI.Commands
             Console.WriteLine("Distance: " + Shell.CurrentUser.Distance);
             Console.WriteLine("Routes:");
 
-            List<Route> routes = Shell.DBWorker.GetUserRoutes(Shell.CurrentUser);
+            List<Route> routes = DBWorker.GetUserRoutes(Shell.CurrentUser);
             if (routes != null)
             {
                 foreach (var route in routes)

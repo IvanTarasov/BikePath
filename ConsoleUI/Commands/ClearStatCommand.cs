@@ -1,4 +1,5 @@
-﻿using ConsoleUI.App;
+﻿using BikePath;
+using ConsoleUI.App;
 
 namespace ConsoleUI.Commands
 {
@@ -15,8 +16,8 @@ namespace ConsoleUI.Commands
 
         public void Execute()
         { 
-            ConsoleDrawer.DrawMessage(Shell.DBWorker.ClearRoutes(Shell.CurrentUser));
-            ConsoleDrawer.DrawMessage(Shell.DBWorker.ClearDistance(ref Shell.CurrentUser));
+            DBWorker.ClearRoutes(Shell.CurrentUser);
+            DBWorker.ClearDistance(ref Shell.CurrentUser);
         }
     }
 }

@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container pt-3" id="app" v-cloak>
+        <h1>DISTANCE: {{distance}}</h1>
+        <h1>Routes</h1>
+        <form class="form-inline mb-3" @submit.prevent="createRoute">
+            <div class="form-group mr-5">
+                <label for="title" class="mr-3">Title</label>
+                <input type="text" class="form-control" id="title" v-model="form.title" />
+            </div>
+            <div class="form-group mr-5">
+                <label for="title" class="mr-3">Value</label>
+                <input type="text" class="form-control" id="value" v-model="form.value" />
+            </div>
+            <button class="btn btn-primary" type="submit" :disable="!canCreate">Create</button>
+        </form>
+        <div v-if="routes.length">
+            <div class="card mb-3" v-for="route in routes">
+                <div class="card-body">
+                    <h5 class="card-title">{{route.title}}</h5>
+                    <p class="card-text">{{route.value}}</p>
+                    <button class="btn btn-primary" @click="useRoute(route.id)">Use</button>
+                    <button class="btn btn-danger" @click="deleteRoute(route.id)">Delete</button>
+                </div>
+            </div>
+        </div>
+        <h3 v-else>Routes not found</h3>
+    </div>
+    <script type="module" src="frontend.js"></script>
+</body>
+</html>

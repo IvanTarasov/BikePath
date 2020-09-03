@@ -1,34 +1,68 @@
-﻿@model IEnumerable<BikePath.Models.User>;
-@{
-    //ViewData["Title"] = "Статистика";
-    Layout = null;
+﻿@{
+    ViewData["Title"] = "BIKE PATH";
 }
-<!DOCTYPE html>
 
-<html>
-<head>
-    <title>Статистика пользователя</title>
-</head>
-<body>
-    <h1>Статистика</h1>
-    <h3>Маршруты</h3>
-    <table>
-        <tr>
-            <td>Название</td>
-            <td>Протяженность</td>
-        </tr>
-        @foreach (var user in Model)
-        {
-            @foreach (var route in user.Routes)
-            {
-                <tr>
-                    <td>@route.Title</td>
-                    <td>@route.Length</td>
-                </tr>
-            }
-        }
+    <div class="container pt-3" id="app" v-cloak>
+        <div v-if="userId!==0">
+            <h1>{{name}}</h1>
+            <h2>Distance: {{distance.toFixed(1)}} km</h2>
+            <hr />
+            <h1>Routes: </h1>
+            <button class="btn btn-primary" v-on:click="showCreateRouteModal"> Create new route... </button>
+            <hr />
+            <div v-if="routes.length">
+                <div class="card mb-1" v-for="route in routes">
+                    <div class="card-body">
+                        <h5 class="card-title">{{route.title}}: {{route.length}} km</h5>
+                        <button class="btn btn-primary" v-on:click="useRoute(route.id)"> Use </button>
+                        <button class="btn btn-danger" v-on:click="deleteRoute(route.id)"> Delete </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="fountainG" v-if="loadData">
+            <div id="fountainG_1" class="fountainG"></div>
+            <div id="fountainG_2" class="fountainG"></div>
+            <div id="fountainG_3" class="fountainG"></div>
+            <div id="fountainG_4" class="fountainG"></div>
+            <div id="fountainG_5" class="fountainG"></div>
+            <div id="fountainG_6" class="fountainG"></div>
+            <div id="fountainG_7" class="fountainG"></div>
+            <div id="fountainG_8" class="fountainG"></div>
+        </div>
+
+        <div class="modal" tabindex="-1" id="createRouteModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">CREATE ROUTE</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group mr-5">
+                            <label for="title" class="mr-3">Title</label>
+                            <input type="text" class="form-control" id="title" v-model="routeForm.title" />
+                        </div>
+                        <div class="form-group mr-5">
+                            <label class="mr-3">Length: {{routeForm.length}} km</label>
+                            <input type="range" min="0" max="50" step="0.1" value="0" class="form-control-range" v-model="routeForm.length" />
+                            <a href="https://www.google.ru/maps" target="_blank" class="page-link">Find out the length...</a>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal"> Close </button>
+                        <button v-if="routeForm.length > 0 && routeForm.title" class="btn btn-primary" type="submit" data-dismiss="modal" v-on:click="createRoute"> Create </button>
+                        <button v-else :disabled="true" class="btn btn-danger"> Incorrect data </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
-    </table>
-</body>
-</html>
+@section scripts{
+    <script src="~/lib/vue/vue.js"></script>
+    <script src="~/scripts/frontend.js"></script>
+}

@@ -19,17 +19,17 @@ namespace ConsoleUI.Commands
 
         public void Execute()
         {
-            List<Route> routes = Shell.DBWorker.GetUserRoutes(Shell.CurrentUser);
+            List<Route> routes = DBWorker.GetUserRoutes(Shell.CurrentUser);
             if (routes != null)
             {
                 Console.WriteLine("Routes:");
-                foreach (var route in Shell.DBWorker.GetUserRoutes(Shell.CurrentUser))
+                foreach (var route in DBWorker.GetUserRoutes(Shell.CurrentUser))
                 {
                     Console.WriteLine("  " + route.Title + ": " + route.Length);
                 }
 
                 string routeTitle = Shell.GetData("route");
-                ConsoleDrawer.DrawMessage(Shell.DBWorker.RemoveRoute(Shell.CurrentUser, routeTitle));
+                DBWorker.RemoveRoute(Shell.CurrentUser, routeTitle);
             }
         }
     }

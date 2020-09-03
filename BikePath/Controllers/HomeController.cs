@@ -2,19 +2,15 @@
 using Microsoft.AspNetCore.Mvc;
 using BikePath.Models;
 using Microsoft.EntityFrameworkCore;
+using BikePath;
 
-namespace MobileStore.Controllers
+namespace BikePath.Controllers
 {
     public class HomeController : Controller
     {
-        BikePathContext db;
-        public HomeController(BikePathContext context)
+        public ActionResult Index()
         {
-            db = context;
-        }
-        public IActionResult Index()
-        {
-            return View(db.Users.ToList());
+            return View();
         }
     }
 }

@@ -19,22 +19,9 @@ namespace ConsoleUI.Commands
         {
             Console.WriteLine("[NEW ROUTE]");
             string title = Shell.GetData("title");
-            double length;
+            string length = Shell.GetData("length");
 
-            while (true)
-            {
-                string len = Shell.GetData("length");
-
-                if (double.TryParse(len, out length))
-                {
-                    break;
-                }
-                else
-                {
-                    ConsoleDrawer.DrawMessage(new OperationStatusMessage("Incorrect length!", "ERROR"));
-                }
-            }
-            ConsoleDrawer.DrawMessage(Shell.DBWorker.AddRoute(title, length, ref Shell.CurrentUser));
+            DBWorker.AddRoute(title, length, ref Shell.CurrentUser);
         }
     }
 }
